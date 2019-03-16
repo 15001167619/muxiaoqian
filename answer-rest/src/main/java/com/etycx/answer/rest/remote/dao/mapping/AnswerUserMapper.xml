@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.etycx.answer.rest.remote.dao.AnswerUserMapper">
+
+    <select id="findUserInfo" parameterType="AnswerUser" resultType="AnswerUser">
+        select * from answer_user a
+        <where>
+            <if test="id != null and id != ''">
+                AND a.name =#{id}
+            </if>
+            <if test="phone != null and phone != ''">
+                AND a.phone =#{phone}
+            </if>
+        </where>
+    </select>
+
+</mapper>

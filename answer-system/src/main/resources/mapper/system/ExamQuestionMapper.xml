@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ExamQuestionMapper">
+    
+    <resultMap type="ExamQuestion" id="ExamQuestionResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="question"    column="question"    />
+        <result property="timeLimit"    column="time_limit"    />
+        <result property="status"    column="status"    />
+        <result property="answerContent"    column="answer_content"    />
+        <result property="analyze"    column="analyze"    />
+        <result property="level"    column="level"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+	
+	<sql id="selectExamQuestionVo">
+        select id, type, question, time_limit, `status`, answer_content, `analyze`, `level`, create_time from exam_question
+    </sql>
+	
+    <select id="selectExamQuestionList" parameterType="ExamQuestion" resultMap="ExamQuestionResult">
+        <include refid="selectExamQuestionVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="type != null "> and type = #{type}</if>
+             <if test="question != null  and question != '' "> and question = #{question}</if>
+             <if test="timeLimit != null "> and time_limit = #{timeLimit}</if>
+             <if test="status != null "> and `status` = #{status}</if>
+             <if test="answerContent != null  and answerContent != '' "> and answer_content = #{answerContent}</if>
+             <if test="analyze != null  and analyze != '' "> and `analyze` = #{analyze}</if>
+             <if test="level != null "> and `level` = #{level}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectExamQuestionById" parameterType="Integer" resultMap="ExamQuestionResult">
+        <include refid="selectExamQuestionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertExamQuestion" parameterType="ExamQuestion" useGeneratedKeys="true" keyProperty="id">
+        insert into exam_question(
+			type,
+			question,
+			time_limit,
+			`status`,
+			answer_content,
+			`analyze`,
+			`level`,
+			create_time
+       ) VALUES (
+			#{type},
+			#{question},
+			#{timeLimit},
+			#{status},
+			#{answerContent},
+			#{analyze},
+			#{level},
+			now()
+         )
+    </insert>
+	 
+    <update id="updateExamQuestion" parameterType="ExamQuestion">
+        update exam_question
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null  ">type = #{type},</if>
+            <if test="question != null  and question != ''  ">question = #{question},</if>
+            <if test="timeLimit != null  ">time_limit = #{timeLimit},</if>
+            <if test="status != null  ">`status` = #{status},</if>
+            <if test="answerContent != null  and answerContent != ''  ">answer_content = #{answerContent},</if>
+            <if test="analyze != null  and analyze != ''  ">`analyze` = #{analyze},</if>
+            <if test="level != null  ">`level` = #{level},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteExamQuestionById" parameterType="Integer">
+        delete from exam_question where id = #{id}
+    </delete>
+	
+    <delete id="deleteExamQuestionByIds" parameterType="String">
+        delete from exam_question where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
